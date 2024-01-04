@@ -1,35 +1,49 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import AddTodo from "./components/AddTodo";
+import AppName from "./components/AppName";
+import "./App.css";
+import TodoItems from "./components/TodoItems";
+import { useState } from "react";
+import WelcomeMessage from "./components/WelcomeMessage";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const initialTodoItems = [
+    {
+      name: "Buy Milk",
+      dueDate: "4/10/2023",
+    },
+    {
+      name: "Go To College",
+      dueDate: "4/10/2023",
+    },
+    {
+      name: "Go To College",
+      dueDate: "4/10/2023",
+    },
+  ];
 
+  const [todoItems, setTodoItems] = useState(initialTodoItems);
+
+  const handelNewItem = (itemName, itemDueDate) => {
+    console.log(`New Item Added"${itemName} : ${itemDueDate}`);
+    setTodoItems([
+      ...initialTodoItems,
+      { name: itemName, dueDate: itemDueDate },
+    ]);
+  };
+
+  const handleDeleteItem = (todoItemName) => {
+    console.log("Item Deleted");
+    const newTodoItems = todoItems.filter((item) => item.name != todoItemName);
+    setTodoItems(newTodoItems);
+  };
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <center className="todo-container">
+      <AppName />
+      <AddTodo onNewItem={handelNewItem} />
+      {todoItems.length === 0 && <WelcomeMessage />}
+      <TodoItems onDeleteClick={handleDeleteItem} todoItems={todoItems} />
+    </center>
+  );
 }
 
-export default App
+export default App;
